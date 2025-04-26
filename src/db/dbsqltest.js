@@ -1,9 +1,11 @@
 var mysql2 = require('mysql2');
+var pass = process.env.PASSWORD;
+console.log(pass);
 
 var con = mysql2.createConnection({
   host: "localhost",
   user: "root",
-  password: "PlaidPride76SQL!@#$"
+  password: pass
 });
 
 con.connect(function(err) {
