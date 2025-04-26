@@ -1,7 +1,13 @@
 import home_icon from "../../public/assets/home-icon.png"
 import logout_icon from "../../public/assets/logout-icon.png"
+import { useAuth } from "./AuthProvider"
 
 function Navbar(props) {
+    const { user } = useAuth();
+
+    if (user == null)
+        return;
+
     return (
     <>
         <div className={`flex flex-col sticky justify-between w-40 text-xl h-full bg-healthygreen p-3`}>

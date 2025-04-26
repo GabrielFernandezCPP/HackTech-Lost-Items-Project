@@ -1,4 +1,5 @@
 import { createContext, useContext, useEffect, useState } from "react";
+import { get_login } from "../api/requests.mjs";
 const AuthContext = createContext();
 
 const AuthProvider = ({ children }) => 
@@ -22,7 +23,8 @@ const AuthProvider = ({ children }) =>
     }
 
     const login = async (username, password) => {
-
+        const user = await get_login(username, password);
+        setUser(user);
     }
 
     const logout = async () => {

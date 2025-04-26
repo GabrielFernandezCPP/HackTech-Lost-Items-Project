@@ -1,13 +1,19 @@
 import axios from 'axios'
 
+const API_URL = import.meta.env.VITE_API_URL;
+
 // Axios request
 
-export const get_ = async () => {
-    const res = await axios.get(`${import.meta.env.VITE_API_URL}/`);
+export const get_login = async () => {
+    const res = await axios.get(`${API_URL}/auth/login`);
+
     if (res.status != 200)
     {
+        return null;
         console.error(res.statusText);
     }
 
-    return {success: res.status == 200};
+    return res.data;
 }
+
+
