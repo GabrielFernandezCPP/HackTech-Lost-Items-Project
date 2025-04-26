@@ -1,0 +1,23 @@
+{
+  "name": "lost-and-found-backend",
+  "version": "1.0.0",
+  "description": "backend for lost-and-found app",
+  "homepage": "https://github.com/GabrielFernandezCPP/HackTech-Lost-Items-Project#readme",
+  "bugs": {
+    "url": "https://github.com/GabrielFernandezCPP/HackTech-Lost-Items-Project/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/GabrielFernandezCPP/HackTech-Lost-Items-Project.git"
+  },
+  "license": "ISC",
+  "author": "Jonathan Woline",
+  "type": "module",
+  "main": "app.mjs",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "dependencies": {
+    "express": "^5.1.0"
+  }
+}
