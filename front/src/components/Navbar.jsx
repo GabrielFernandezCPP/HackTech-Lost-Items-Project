@@ -1,6 +1,5 @@
 import home_icon from "../../public/assets/home-icon.png"
 import logout_icon from "../../public/assets/logout-icon.png"
-
 function Navbar(props) {
     return (
     <>
@@ -14,7 +13,7 @@ function Navbar(props) {
                     <img className="h-6" src={logout_icon}></img>
                     <span>Logout</span>
                 </a>
-            </div>
+            </div>      
         </div>
     </>
     )
