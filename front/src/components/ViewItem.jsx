@@ -73,7 +73,7 @@ function ViewClientPage() {
         const generateQrWithCaption = async () => {
           if (item && item.uuid) {
             try {
-              const url = `https://${SITE_URL}/lost/${item.uuid}`;
+              const url = `https://lost-and-found-h4rt.onrender.com//lost/${item.uuid}`;
     
               const qrBase64 = await QRCode.toDataURL(url, { margin: 2 });
     
