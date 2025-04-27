@@ -3,7 +3,7 @@ import ItemBox from "./ItemBox"
 import { get_items } from "../api/requests.mjs";
 
 // const APP_URL = import.meta.env.VITE_API_URL;
-const APP_URL = 'http://localhost:5173';
+const APP_URL = 'https://lost-and-found-h4rt.onrender.com:5173';
 
 function ViewClientPage() {
     const [items, setItems] = useState([]);
