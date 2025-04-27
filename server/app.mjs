@@ -102,20 +102,19 @@ app.get('/auth/check', async (req, res) => {
 // Register account in MySQL db. Don't forget to hash!!!!!
 app.post('/auth/register', async (req, res) => {
     const { email, password } = req.body;
-    const added_row = db_AddUser(email, password);
+    const added_row = await head.db_AddUser(email, password);
 
+    console.log(`Added row: ${added_row}`);
+    
     if (added_row) {
         let email = added_row[0].email;
         req.session.user = { email };
         res.json({ email: email });
         res.status(200);
-        return;
     }
-    else
-    {
-        res.sendStatus(500);
-        return;
-    }
+    else res.sendStatus(500);
+
+    return added_row;
 }
 );
 
@@ -185,7 +184,8 @@ app.post('/api/contact-owner', async (req, res) => {
       console.error(error);
       res.status(500).json({ message: 'Email failed to send' });
     }
-  });
+
+});
 
 console.log(await head.db_FindUserByID(1));
 

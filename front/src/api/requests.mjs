@@ -40,7 +40,7 @@ export const register_user = async (email, password) => {
                 password: password
             }
         );
-        return res.data;
+        return res.data.email;
     } catch (error) {
         console.error(error.message);
         return null;
@@ -49,6 +49,7 @@ export const register_user = async (email, password) => {
 
 export const check_auth = async () => {
     try {
+        console.log(API_URL);
         const res = await axios.get(`${API_URL}/auth/check`);
         return res.status == 200;
     } catch (error) {
