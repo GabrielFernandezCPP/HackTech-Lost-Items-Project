@@ -15,6 +15,7 @@
 
 :root {
     background-color: var(--color-white);
+    overflow-y: hidden;
 }
 
 @theme {

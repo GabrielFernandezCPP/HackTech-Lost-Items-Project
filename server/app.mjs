@@ -8,6 +8,8 @@ import session from 'express-session'; // Sessions
 import { body, validationResult } from 'express-validator'; // Middleware for validating requests
 import crypto from 'crypto'; // Cryptocurrencies obviously
 import * as head from './dbsqltest.mjs';
+import nocache from 'nocache';
+
 //import { db_FindPersonByID } from '../src/db/dbheader.mjs';
 
 const __filename = fileURLToPath(import.meta.url);
@@ -72,16 +74,19 @@ app.get('/auth/logout', (req, res) => {
     });
 });
 
-app.get('/auth/check', async (req, res) => {
+app.get('/auth/check', nocache(), async (req, res) => {
     try {
         if (req.session.user)
         {
-            res.sendStatus(200);
+            const email = req.session.user;
+            res.status(200);
+            res.json({ email });
             return;
         }
         else
         {
-            res.sendStatus(401);
+            res.status(401);
+            res.json({ email: null });
             return;
         }
     } catch (error) {

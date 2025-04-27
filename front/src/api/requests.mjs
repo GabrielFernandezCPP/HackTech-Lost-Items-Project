@@ -50,9 +50,9 @@ export const register_user = async (email, password) => {
 export const check_auth = async () => {
     try {
         const res = await axios.get(`${API_URL}/auth/check`);
-        return res.status == 200;
+        return res.data.email;
     } catch (error) {
         console.error(error.message);
-        return false;
+        return null;
     }
 }

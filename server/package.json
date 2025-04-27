@@ -27,6 +27,7 @@
     "express-session": "^1.18.1",
     "express-validator": "^7.2.1",
     "mysql2": "^3.14.0",
+    "nocache": "^4.0.0",
     "path": "^0.12.7",
     "postgres": "^3.4.5",
     "url": "^0.11.4",
