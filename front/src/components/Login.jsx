@@ -12,8 +12,7 @@ const Auth = () =>
     const handleLogin = async (element) => {
         element.preventDefault();
         await login(email, password);
-        if (user != null)
-            await navigate("/dashboard");
+        await navigate("/dashboard");
     };
 
     return <>

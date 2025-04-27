@@ -51,7 +51,9 @@ export async function db_GetPasswordHash(email) {
             .select("password")
             .eq("email", email);
         
-        return data[0].password;
+        if (data[0] != null)
+            return data[0].password;
+        return null;
     } catch (err) {
         console.error("UNEXPECTED ERROR!: ", err.message);
         return null;
@@ -61,7 +63,8 @@ export async function db_GetPasswordHash(email) {
 export async function db_ValidatePassword(email, password) {
     try {
         const passwordHash = await db_GetPasswordHash(email);
-        console.log(passwordHash, password);
+        if (passwordHash == null)
+            return false;
         if (await argon2.verify(passwordHash, password))
         {
             return true;
@@ -69,7 +72,7 @@ export async function db_ValidatePassword(email, password) {
         return false;
     } catch (err) {
         console.error("UNEXPECTED ERROR!: ", err.message);
-        return null;
+        return false;
     }
 } 
 
@@ -91,6 +94,7 @@ export async function db_CheckIfItemOwnerExistsAndDeleteIfNot(email) {
             .select("*")
             .eq("email", email);
         
+        //If the returned data is none, then the user is not registered. So delete all of their items.
         var notInDB = (data.length == 0);
 
         if (notInDB)

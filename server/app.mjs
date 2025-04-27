@@ -23,12 +23,6 @@ const app = express();
 const port = 3000;
 const secret = crypto.randomBytes(32).toString('hex');
 
-app.use(session({
-    secret: secret, // a secret string used to sign the session ID cookie
-    resave: false, // don't save session if unmodified
-    saveUninitialized: false // don't create session until something stored
-}));
-
 const read_data = (path) => {
     const raw = fs.readFileSync(path);
     return JSON.parse(raw);
@@ -38,9 +32,21 @@ const write_data = (path, data) => {
     fs.writeFileSync(path, JSON.stringify(data, null, 4));
 }
 
+app.use(session({
+    secret: secret, // a secret string used to sign the session ID cookie
+    resave: false, // don't save session if unmodified
+    saveUninitialized: false, // don't create session until something stored
+    cookie: {
+        httpOnly: true,    // Cannot be accessed by JS in browser
+        secure: false,     // Set to true if using HTTPS!
+        maxAge: 24 * 60 * 60 * 1000 // 1 day session
+    }
+}));
+
 // Change for production
 app.use(cors({
     origin: "http://localhost:5173", 
+    credentials: true
 }))
 app.use(express.json());
 app.use(express.static("./public"));
@@ -49,17 +55,19 @@ app.get('/', (req, res) => {
   res.send('Hello World!')
 })
 
-app.post('/auth/login', (req, res) => {
+app.post('/auth/login', async (req, res) => {
     const { email, password } = req.body;
 
-    if (db_ValidatePassword(email, password)) {
+    if (await head.db_ValidatePassword(email, password)) {
         req.session.user = { email };
         res.json({ email: email });
         res.status(200);
+        return;
     }
     else
     {
         res.sendStatus(401);
+        return;
     }
 });
 
@@ -67,23 +75,26 @@ app.get('/auth/logout', (req, res) => {
     req.session.destroy(() => {
         res.clearCookie('connect.sid');
         res.sendStatus(200);
+        return;
     });
 });
 
-app.post('/auth/check', async (req, res) => {
-    const apiResponse = {success: false, user: null};
+app.get('/auth/check', async (req, res) => {
     try {
         if (req.session.user)
         {
             res.sendStatus(200);
+            return;
         }
         else
         {
             res.sendStatus(401);
+            return;
         }
     } catch (error) {
         console.log(error);
         res.sendStatus(500);
+        return;
     }
     res.json(apiResponse);
 })
@@ -98,10 +109,12 @@ app.post('/auth/register', async (req, res) => {
         req.session.user = { email };
         res.json({ email: email });
         res.status(200);
+        return;
     }
     else
     {
         res.sendStatus(500);
+        return;
     }
 }
 );
