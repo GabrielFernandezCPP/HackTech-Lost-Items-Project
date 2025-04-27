@@ -33,8 +33,8 @@ const AuthProvider = ({ children }) =>
         setUser(null);
     }
 
-    return <AuthContext.Provider value={{ user, login, register, logout, loginAttempted }}>
-        {loading ? "Loading..." : children}
+    return <AuthContext.Provider value={{ user, login, register, loaded, logout, loginAttempted }}>
+        {!loaded ? "Loading..." : children}
     </AuthContext.Provider>
 };
 
