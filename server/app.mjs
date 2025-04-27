@@ -42,10 +42,10 @@ app.get('/', (req, res) => {
   res.send('Hello World!')
 })
 
-app.post('/auth/login', (req, res) => {
+app.post('/auth/login', async (req, res) => {
     const { email, password } = req.body;
 
-    if (db_ValidatePassword(email, password)) {
+    if (await head.db_ValidatePassword(email, password)) {
         req.session.user = { email };
         res.json({ email: email });
         res.status(200);

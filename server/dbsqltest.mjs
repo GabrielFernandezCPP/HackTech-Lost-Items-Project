@@ -91,6 +91,7 @@ export async function db_CheckIfItemOwnerExistsAndDeleteIfNot(email) {
             .select("*")
             .eq("email", email);
         
+        //If the returned data is none, then the user is not registered. So delete all of their items.
         var notInDB = (data.length == 0);
 
         if (notInDB)
