@@ -57,7 +57,7 @@ const LostItemPage = () => {
 
 
     console.log('Button clicked!');
-    const res = await fetch('http://localhost:3000/api/contact-owner', {
+    const res = await fetch('https://lost-and-found-h4rt.onrender.com:3000/api/contact-owner', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({

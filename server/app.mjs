@@ -50,7 +50,7 @@ app.use(session({
 
 // Change for production
 app.use(cors({
-    origin: ['http://localhost:5173', '*'],
+    origin: ['https://lost-and-found-h4rt.onrender.com:5173', '*'],
     methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH', 'OPTIONS'], 
     credentials: true
 }))
