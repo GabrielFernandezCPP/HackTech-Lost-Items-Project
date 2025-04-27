@@ -12,6 +12,10 @@ import nodemailer from 'nodemailer'
 import dotenv from 'dotenv'
 import nocache from 'nocache';
 
+const NEUTRAL = 0;
+const LOST = 1;
+const FOUND = 2;
+
 dotenv.config();
 const emailUsername = process.env.EMAIL_USERNAME;
 const emailPassword = process.env.EMAIL_PASSWORD; 
@@ -109,7 +113,7 @@ app.post('/auth/register', async (req, res) => {
 
     console.log(`Added row: ${added_row}`);
     
-    if (added_row) {
+    if (added_row != null) {
         let email = added_row[0].email;
         req.session.user = { email };
         res.json({ email: email });
@@ -118,8 +122,7 @@ app.post('/auth/register', async (req, res) => {
     else res.sendStatus(500);
 
     return added_row;
-}
-);
+});
 
 app.post('/items/new', async (req, res) => {
     // Validate item name through database
@@ -132,6 +135,18 @@ app.post('/items/new', async (req, res) => {
 
     // Add item to database
 
+    // Respond
+}
+);
+
+app.post('/items/get', async (req, res) => {
+    // Validate item name through database
+    const email = req.session.user;
+    const items = await head.db_GetItemsFromUser(email);
+
+    console.log(items)
+
+    res.status(200).json({ items: items });
     // Respond
 }
 );
@@ -190,6 +205,6 @@ app.post('/api/contact-owner', async (req, res) => {
 
 });
 
-console.log(await head.db_FindUserByID(1));
+await head.db_GetItemsFromUser("john@email");//head.db_AddItem("john@email", "Biscut", "A biscut.", NEUTRAL);
 
 //console.log(await head.db_CheckIfItemOwnerExistsAndDeleteIfNot("johndoe@rand.otcom"));

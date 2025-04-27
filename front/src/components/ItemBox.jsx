@@ -5,7 +5,7 @@ function status_to_style(status)
         case "Lost":
             return "bg-red-500";
         case "Found":
-            return "bg-green-500";
+            return "bg-healthygreen animate-pulse";
         default:
             return "bg-black";
     }
@@ -14,9 +14,10 @@ function status_to_style(status)
 function Navbar(props) {
     return (
     <>
-        <a href={ props.destination } className="flex flex-col space-y-3 rounded-lg bg-gray-400 hover:bg-gray-300 items-center justify-center w-full p-5">
-            <div className="text-xl">Water Bottle</div>
-            <div className={`text-lg ${status_to_style(props.status)} text-white w-full text-center rounded-sm`}>{ props.status }</div>
+        <a href={ props.destination } className="flex flex-col space-y-3 rounded-lg bg-white active:bg-healthygreen items-left justify-center w-full">
+            <div className="text-xl min-w-fit font-bold bg-gray-400 p-2">{ props.name }</div>
+            <div className="text-md w-full text-left p-2 bg-white overflow-clip text-ellipsis">{ props.description }</div>
+            <div className={`text-lg ${status_to_style(props.status)} text-white w-full text-center`}>{ props.status }</div>
         </a>
     </>
     )
