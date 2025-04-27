@@ -17,14 +17,15 @@ export async function db_AddUser(email, raw_password) {
             .from('Users')
             .insert([
                 { email: email, password: hashed_password }
-            ]);
+            ])
+            .select();
 
         if (error) {
             console.error('Error inserting user:', error.message);
-            //alert("User already exists.");
             return null;
         }
-        return data[0].email;
+        
+        return data;
     } catch (err) {
         console.error('Unexpected error:', err.message);
         return null;
@@ -50,10 +51,33 @@ export async function db_GetPasswordHash(email) {
         const { data, error } = await supabase
             .from("Users")
             .select("password")
-            .eq("email", email);
+            .eq("email", email)
+            .single();
         
-        if (data[0] != null)
-            return data[0].password;
+        if (data != null)
+            return data.password;
+        return null;
+    } catch (err) {
+        console.error("UNEXPECTED ERROR!: ", err.message);
+        return null;
+    }
+}
+
+export async function db_GetItemsFromUser(email) {
+    try {
+        const ids_query = await supabase
+            .from("Users")
+            .select("items")
+            .eq("email", email)
+            .single();
+        
+        
+        
+        if (ids_query.data != null)
+        {
+            
+        }
+
         return null;
     } catch (err) {
         console.error("UNEXPECTED ERROR!: ", err.message);
