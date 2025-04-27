@@ -218,6 +218,50 @@ export async function db_CheckIfItemOwnerExistsAndDeleteIfNot(email) {
     }
 }
 
+export async function db_RemoveItem(email, id) {
+    try {
+        if (await db_CheckIfPersonExists() == false)
+        {
+            console.log(`${email} does not exist in our system.`);
+            return false;
+        }
+        
+        //Remove id
+        var responseItem = await supabase
+            .from("lost_items")
+            .delete()
+            .eq('id', id);
+
+        //Get items
+        var response = await supabase
+            .from("Users")
+            .select("items")
+            .eq("email", email)
+            .single();
+        
+        //Remove item
+        console.log(response.data.items);
+
+        const index = response.data.items.indexOf(id);
+
+        if (index > -1) {response.data.items.splice(index, 1);}
+
+        var newArr = response.data.items;
+
+        //Set new arr
+        response = await supabase
+            .from("Users")
+            .update({items : newArr})
+            .eq('email', email)
+
+        console.log(`Removed ${id} from ${email}.`);
+        return true;
+    } catch (err) {
+        console.error('Unexpected error in REMOVE ITEM:', err.message);
+        return null;
+    }
+}
+
 export async function db_AddItem(email, iName, iDesc, status) {
     try {
         if (await db_CheckIfPersonExists() == false)
@@ -236,7 +280,7 @@ export async function db_AddItem(email, iName, iDesc, status) {
             .select()
             .single();
         
-        var idCreated = response.data[0].id;
+        var idCreated = response.data.id;
         //console.log(`Created: ${idCreated}`);
         
         response = await supabase

@@ -50,7 +50,7 @@ app.use(session({
 
 // Change for production
 app.use(cors({
-    origin: ['https://lost-and-found-h4rt.onrender.com:5173', '*'],
+    origin: ['http://localhost:5173', '*'],
     methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH', 'OPTIONS'], 
     credentials: true
 }))
@@ -217,6 +217,7 @@ app.use((req, res) => {
     res.sendFile(join(__dirname, 'public', 'index.html'));
 });
 
-// await head.db_GetItemsFromUser("john@email");//head.db_AddItem("john@email", "Biscut", "A biscut.", NEUTRAL);
-
+// await head.db_GetItemsFromUser("john@email");//
+//head.db_AddItem("john@email", "Beach Ball", "A beach ball.", NEUTRAL);
+//ead.db_RemoveItem("john@email", 36);
 //console.log(await head.db_CheckIfItemOwnerExistsAndDeleteIfNot("johndoe@rand.otcom"));
