@@ -1,9 +1,10 @@
 import { useEffect, useState } from "react";
-import { get_items } from "../api/requests.mjs";
+import { get_items, add_items } from "../api/requests.mjs";
 import { useParams } from "react-router-dom";
 import Loading from "./Loading";
 import QRCode from 'qrcode';
 
+const SITE_URL = import.meta.env.VITE_API_URL;
 
 function status_to_style(status)
 {
@@ -72,7 +73,7 @@ function ViewClientPage() {
         const generateQrWithCaption = async () => {
           if (item && item.uuid) {
             try {
-              const url = `https://yourwebsite.com/lost/${item.uuid}`;
+              const url = `https://${SITE_URL}/lost/${item.uuid}`;
     
               const qrBase64 = await QRCode.toDataURL(url, { margin: 2 });
     
@@ -113,7 +114,23 @@ function ViewClientPage() {
 
     const handleSubmit = (e) => {
         e.preventDefault();
-        console.log('a');
+        console.log(title);
+        var ready = false;
+
+        if (item.id == -1) //ID
+        {
+            if (title != "Add Item")
+            {
+                ready = true;
+            }
+
+            //add to db
+            if (ready)
+            {
+                add_items(item.owner_email, title, description, status);
+            }
+        }
+
         return;
     }
 

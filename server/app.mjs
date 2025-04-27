@@ -87,7 +87,7 @@ app.get('/auth/check', nocache(), async (req, res) => {
         {
             const email = req.session.user;
             res.status(200);
-            res.json({ email });
+            res.json({ email: email });
             return;
         }
         else
@@ -122,10 +122,11 @@ app.post('/auth/register', async (req, res) => {
     return added_row;
 });
 
-app.post('/items/new', async (req, res) => {
+app.post('/items/add', async (req, res) => {
     const email = req.session.user;
-    const item = req.body.item;
-    const added_row = await head.db_AddItem(email, item.name, item.description, 0);
+    const title = req.body.title;
+    const description = req.body.description;
+    const added_row = await head.db_AddItem(email, title, description, 0);
 
     if (added_row != null) {
         let name = added_row.item_name;
@@ -142,10 +143,16 @@ app.post('/items/new', async (req, res) => {
 
 app.post('/items/get', async (req, res) => {
     // Validate item name through database
-    const email = req.session.user.email;
-    const items = await head.db_GetItemsFromUser(email);
-
-    console.log(items)
+    let items = {};
+    if (req.body != null && 'uuid' in req.body)
+    {
+        items = await head.db_GetItemWithUUID(req.body.uuid);
+    }
+    else
+    {
+        const email = req.session.user.email;
+        items = await head.db_GetItemsFromUser(email);
+    }
 
     res.status(200).json({ items: items });
     // Respond

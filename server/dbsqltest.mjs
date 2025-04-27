@@ -85,7 +85,6 @@ export async function db_GetPasswordHash(email) {
 
 export async function db_GetItemsFromUser(email) {
     try {
-        console.log(email)
         const ids_query = await supabase
             .from("Users")
             .select("items")
@@ -129,6 +128,21 @@ export async function db_GetItemsFromUser(email) {
 
         console.log("User has an invalid item array.");
         return null;
+    } catch (err) {
+        console.error("UNEXPECTED ERROR!: ", err.message);
+        return null;
+    }
+}
+
+export async function db_GetItemWithUUID(uuid) {
+    try {
+        const ids_query = await supabase
+            .from("lost_items")
+            .select("*")
+            .eq("uuid", uuid)
+            .single();
+
+        return ids_query.data;
     } catch (err) {
         console.error("UNEXPECTED ERROR!: ", err.message);
         return null;

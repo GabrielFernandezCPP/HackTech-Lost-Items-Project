@@ -57,6 +57,24 @@ export const check_auth = async () => {
     }
 }
 
+export const add_items = async (email, title, description, status) => {
+    try {
+        const res = await axios.post(`${API_URL}/items/add`,
+            {
+                email: email,
+                title: title,
+                description: description,
+                status: status
+            }
+        );
+
+        return res.data.email;
+    } catch (error) {
+        console.error(error.message);
+        return null;
+    }
+}
+
 export const get_items = async () => {
     try {
         const res = await axios.post(`${API_URL}/items/get`);
@@ -66,3 +84,12 @@ export const get_items = async () => {
         return null;
     }
 }
+
+export async function get_lost_item(uuid) {
+    try {
+        const res = await axios.post(`${API_URL}/items/get`, {uuid: uuid});
+        return res.data.items;
+    } catch (err) {
+        console.error('Error fetching item:', err);
+    }
+  };

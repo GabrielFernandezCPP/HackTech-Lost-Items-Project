@@ -4,6 +4,7 @@ import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import NotFound from './NotFound';
 import Loading from './Loading'
+import { get_lost_item } from '../api/requests.mjs';
 
 const supabaseUrl = import.meta.env.VITE_DATABASE_URL;
 const supabaseKey = import.meta.env.VITE_DB_ANON_KEY;
@@ -22,18 +23,14 @@ const LostItemPage = () => {
     const fetchLostItem = async () => {
       console.log('Fetching lost item with UUID:', `"${uuid}"`);
       try {
-        const { data, error } = await supabase
-          .from('lost_items')
-          .select('owner_email, item_name, item_description')
-          .eq('uuid', uuid)
-          .single();  // Expect exactly one matching row
+        const item = await get_lost_item(uuid);
 
-      if (error || !data) {
+      if (item == null) {
         console.error('Item not found, redirecting...');
         navigate('/errorpage'); // Redirect to 404 page
       } 
       else {
-        setLostItem(data);
+        setLostItem(item);
       }
       }catch (err) {
         console.error('Error fetching item:', err);
