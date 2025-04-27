@@ -23,8 +23,6 @@ function ViewClientPage() {
         <div className="overflow-y-auto h-full">
             <div className="grid lg:grid-cols-6 md:grid-cols-3 sm:border-0 sm:grid-cols-2 grid-cols-1 sm:gap-4 gap-1 max-h-full">
                 {
-                (items == null) ?
-                <div>No Items Available. Add new item (button)</div> :
                 items.map((object) =>{
                     return <ItemBox key={object.id} destination={`${APP_URL}/item/${object.uuid}`} status={object.status} name={object.item_name} description={object.item_description}></ItemBox>
                 })}

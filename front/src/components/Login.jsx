@@ -17,7 +17,8 @@ const Auth = () =>
 
     return <>
         <div className="flex justify-center w-screen h-screen align-middle">
-            <form className="shadow-black flex flex-col gap-4 p-4 w-[80%] mt-32" onSubmit={handleLogin}>
+            <form className="shadow-black flex flex-col gap-4 p-4 w-[80%] mt-16" onSubmit={handleLogin}>
+                <div className="text-3xl font-bold text-green-600">Lost and Found</div>
                 <h1 className="p-2 text-2xl text-black">Sign In</h1>
                 <input className="bg-gray-300 p-2" type="text" placeholder="Email" onChange={(element) => {setEmail(element.target.value)}} value={email} required />
                 <input className="bg-gray-300 p-2" type="password" placeholder="Password" onChange={(element) => {setPassword(element.target.value)}} value={password} required />

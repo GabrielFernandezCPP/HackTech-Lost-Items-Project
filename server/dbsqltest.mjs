@@ -37,7 +37,8 @@ export async function db_AddUser(email, raw_password) {
             .insert([
                 { email: email, password: hashed_password, items: [] }
             ])
-            .select();
+            .select()
+            .single();
 
         if (error) {
             console.error('Error inserting user:', error.message);
@@ -218,7 +219,8 @@ export async function db_AddItem(email, iName, iDesc, status) {
             .insert([{
                 uuid: uuidGen, owner_email: email, item_name: iName, item_description: iDesc, status: status
             }])
-            .select();
+            .select()
+            .single();
         
         var idCreated = response.data[0].id;
         //console.log(`Created: ${idCreated}`);
