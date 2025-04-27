@@ -7,7 +7,8 @@ import { dirname, join } from 'path';
 import session from 'express-session'; // Sessions
 import { body, validationResult } from 'express-validator'; // Middleware for validating requests
 import crypto from 'crypto'; // Cryptocurrencies obviously
-import { add_user } from './dbsqltest.mjs';
+import { db_FindUserByID } from './dbsqltest.mjs';
+//import { db_FindPersonByID } from '../src/db/dbheader.mjs';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
@@ -26,7 +27,7 @@ const read_data = (path) => {
     return JSON.parse(raw);
 }
 
-add_user('johndoe@rand.otcom', 'password123');
+//db_AddUser('johndoe@rand.otcom', 'password123');
 
 const write_data = (path, data) => {
     fs.writeFileSync(path, JSON.stringify(data, null, 4));
@@ -135,3 +136,5 @@ app.post('/items/remove', async (req, res) => {
 app.listen(port, () => {
   console.log(`Example app listening on port ${port}`)
 })
+
+console.log(await db_FindUserByID(1));

@@ -7,7 +7,7 @@ configDotenv();
 const db_url = process.env.DATABASE_URL;
 const db_key = process.env.DB_ANON_KEY;
 
-export async function add_user(email, raw_password) {
+export async function db_AddUser(email, raw_password) {
     try {
         // 1. Hash the password
         const hashed_password = await argon2.hash(raw_password);
@@ -30,6 +30,19 @@ export async function add_user(email, raw_password) {
     }
 }
 
+export async function db_FindUserByID(id) {
+    try {
+        const { data, error } = await supabase
+            .from("Users")
+            .select("*")
+            .eq("id", id);
+        
+        return data;
+    } catch (err) {
+        console.error("UNEXPECTED ERROR!: ", err.message);
+        return null;
+    }
+}
 
 
 export function db_CreateDB(con) {
