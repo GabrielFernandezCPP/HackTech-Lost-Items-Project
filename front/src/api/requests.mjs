@@ -66,3 +66,21 @@ export const get_items = async () => {
         return null;
     }
 }
+
+export const add_items = async (email, title, description, status) => {
+    try {
+        const res = await axios.post(`${API_URL}/items/add`,
+            {
+                email: email,
+                title: title,
+                description: description,
+                status: status
+            }
+        );
+
+        return res.data.email;
+    } catch (error) {
+        console.error(error.message);
+        return null;
+    }
+}

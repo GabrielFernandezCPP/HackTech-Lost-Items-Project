@@ -6,7 +6,7 @@ import { v1, v4 } from 'uuid'
 import { dirname, join } from 'path';
 import session from 'express-session'; // Sessions
 import { body, validationResult } from 'express-validator'; // Middleware for validating requests
-import crypto from 'crypto'; // Cryptocurrencies obviously
+//import crypto from 'crypto'; // Cryptocurrencies obviously
 import * as head from './dbsqltest.mjs';
 import nodemailer from 'nodemailer'
 import dotenv from 'dotenv'
@@ -25,7 +25,7 @@ const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
 const app = express();
 const port = 3000;
-const secret = crypto.randomBytes(32).toString('hex');
+//const secret = crypto.randomBytes(32).toString('hex');
 
 const read_data = (path) => {
     const raw = fs.readFileSync(path);

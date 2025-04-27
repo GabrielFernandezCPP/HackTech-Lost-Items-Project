@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { get_items } from "../api/requests.mjs";
 import { useParams } from "react-router-dom";
 import Loading from "./Loading";
+import { db_AddItem } from "../../../server/dbsqltest.mjs";
 
 function status_to_style(status)
 {
@@ -68,7 +69,23 @@ function ViewClientPage() {
 
     const handleSubmit = (e) => {
         e.preventDefault();
-        console.log('a');
+        console.log(title);
+        var ready = false;
+
+        if (item.id == -1) //ID
+        {
+            if (title != "Add Item")
+            {
+                ready = true;
+            }
+
+            //add to db
+            if (ready)
+            {
+                add_items(item.owner_email, title, description, status);
+            }
+        }
+
         return;
     }
 
@@ -82,9 +99,9 @@ function ViewClientPage() {
                     <div className="text-2xl">Change Status</div>
                     <button onClick={() => {console.log('a')}} className={`text-lg text-left cursor-pointer p-3 ${status_to_style(item.status)} text-white w-full text-center`}>{ status_to_text(item.status) }</button>
                     <div className="text-2xl">Edit Name</div>
-                    <input className="border border-green-600 p-2 focus:outline-none focus:border-2" type="text" value={title} onChange={(element) => {setTitle(element.value)}}></input>
+                    <input className="border border-green-600 p-2 focus:outline-none focus:border-2" type="text" value={title} onChange={(element) => {setTitle(element.target.value)}}></input>
                     <div className="text-2xl">Edit Description</div>
-                    <input className="border border-green-600 p-2 focus:outline-none focus:border-2" type="text" value={description} onChange={(element) => {setDescription(element.value)}}></input>
+                    <input className="border border-green-600 p-2 focus:outline-none focus:border-2" type="text" value={description} onChange={(element) => {setDescription(element.target.value)}}></input>
                     <button className="bg-green-600 text-black hover:bg-healthygreen p-2 mt-6 cursor-pointer" type="submit" value="Submit">Submit</button>
                 </form>
                 <div className="w-fit mt-10 sm:h-fit h-[10px] mx-10">
