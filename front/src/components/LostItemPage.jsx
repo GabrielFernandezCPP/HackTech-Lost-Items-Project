@@ -51,13 +51,7 @@ const LostItemPage = () => {
   if (loading) {
     return <Loading></Loading>
   }
-
-  if (notFound) {
-    return <NotFound></NotFound>;
-  }
-
   
-
   const handleContactOwner = async () => {
     if (!finderMessage.trim()) {
       alert('Please type a message before sending.');
