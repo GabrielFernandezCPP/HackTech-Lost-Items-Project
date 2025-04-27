@@ -83,4 +83,31 @@ export function db_CreateDB(con) {
     return con;
 }
 
+export async function db_CheckIfItemOwnerExistsAndDeleteIfNot(email) {
+    try {
+        //Check to see email is in main db.
+        const { data, error } = await supabase
+            .from("Users")
+            .select("*")
+            .eq("email", email);
+        
+        var notInDB = (data.length == 0);
+
+        if (notInDB)
+        {
+            const { data, error } = await supabase
+                .from("lost_items")
+                .delete()
+                .eq('owner_email', email)
+            
+                console.log("Deleted item.");
+        }
+        
+        return notInDB;
+    } catch (err) {
+        console.error("UNEXPECTED ERROR!: ", err.message);
+        return null;
+    }
+}
+
 export const supabase = createClient(db_url, db_key);

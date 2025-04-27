@@ -7,7 +7,7 @@ import { dirname, join } from 'path';
 import session from 'express-session'; // Sessions
 import { body, validationResult } from 'express-validator'; // Middleware for validating requests
 import crypto from 'crypto'; // Cryptocurrencies obviously
-import { db_AddUser, db_FindUserByID, db_ValidatePassword } from './dbsqltest.mjs';
+import * as head from './dbsqltest.mjs';
 //import { db_FindPersonByID } from '../src/db/dbheader.mjs';
 
 const __filename = fileURLToPath(import.meta.url);
@@ -140,4 +140,6 @@ app.listen(port, () => {
   console.log(`Example app listening on port ${port}`)
 })
 
-console.log(await db_FindUserByID(1));
+console.log(await head.db_FindUserByID(1));
+
+//console.log(await head.db_CheckIfItemOwnerExistsAndDeleteIfNot("johndoe@rand.otcom"));
