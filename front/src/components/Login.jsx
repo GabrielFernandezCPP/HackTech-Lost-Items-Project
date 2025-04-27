@@ -22,7 +22,7 @@ const Auth = () =>
                 <input className="bg-gray-300 p-2" type="text" placeholder="Email" onChange={(element) => {setEmail(element.target.value)}} value={email} required />
                 <input className="bg-gray-300 p-2" type="password" placeholder="Password" onChange={(element) => {setPassword(element.target.value)}} value={password} required />
                 <p className={`text-red-500 ${loginAttempted && !user ? "visible" : "invisible"}`}>Invalid email or password</p>
-                <button className="bg-citrus-blue bg-secondary-gray text-black hover:bg-secondary-green p-2" type="submit">Log In</button>
+                <button className="bg-citrus-blue bg-secondary-gray text-black hover:bg-healthygreen p-2" type="submit">Log In</button>
                 <span>
                     Need an account? Create one <a className="bg-citrus-blue text-blue-700" href="/register">here</a>
                 </span>
