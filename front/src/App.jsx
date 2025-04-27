@@ -6,6 +6,7 @@ import ProtectedRoute from './components/ProtectedRoute';
 import NotFound from './components/NotFound';
 import Register from './components/Register';
 import { useAuth } from './components/AuthProvider';
+import LostItemPage from './components/LostItemPage';
 
 function App() {
     const APP_TITLE = "Title";
@@ -22,6 +23,7 @@ function App() {
                     <Route path="/" element={!user ? <Login /> : <Navigate to="/dashboard" />} />
                     <Route path="/register" element={<Register />} />
                     <Route path="*" element={<NotFound />} />
+                    <Route path="/lost/:uuid" element={<LostItemPage />} />
                 </Routes>
             </BrowserRouter>
         </div>

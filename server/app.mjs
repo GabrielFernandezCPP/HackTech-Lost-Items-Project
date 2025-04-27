@@ -8,8 +8,13 @@ import session from 'express-session'; // Sessions
 import { body, validationResult } from 'express-validator'; // Middleware for validating requests
 import crypto from 'crypto'; // Cryptocurrencies obviously
 import * as head from './dbsqltest.mjs';
+import nodemailer from 'nodemailer'
+import dotenv from 'dotenv'
 import nocache from 'nocache';
 
+dotenv.config();
+const emailUsername = process.env.EMAIL_USERNAME;
+const emailPassword = process.env.EMAIL_PASSWORD; 
 //import { db_FindPersonByID } from '../src/db/dbheader.mjs';
 
 const __filename = fileURLToPath(import.meta.url);
@@ -100,20 +105,19 @@ app.get('/auth/check', nocache(), async (req, res) => {
 // Register account in MySQL db. Don't forget to hash!!!!!
 app.post('/auth/register', async (req, res) => {
     const { email, password } = req.body;
-    const added_row = db_AddUser(email, password);
+    const added_row = await head.db_AddUser(email, password);
 
+    console.log(`Added row: ${added_row}`);
+    
     if (added_row) {
         let email = added_row[0].email;
         req.session.user = { email };
         res.json({ email: email });
         res.status(200);
-        return;
     }
-    else
-    {
-        res.sendStatus(500);
-        return;
-    }
+    else res.sendStatus(500);
+
+    return added_row;
 }
 );
 
@@ -157,6 +161,34 @@ app.post('/items/remove', async (req, res) => {
 app.listen(port, () => {
   console.log(`Example app listening on port ${port}`)
 })
+
+app.post('/api/contact-owner', async (req, res) => {
+    const { ownerEmail, itemName, finderMessage } = req.body;
+  
+    const transporter = nodemailer.createTransport({
+      service: 'gmail',
+      auth: {
+        user: emailUsername,
+        pass: emailPassword
+      }
+    });
+  
+    const mailOptions = {
+      from: emailUsername,
+      to: ownerEmail,
+      subject: `Someone found your item: ${itemName}`,
+      text: "finder message test, this is what the user inputs"
+    };
+  
+    try {
+      await transporter.sendMail(mailOptions);
+      res.json({ message: 'Email sent successfully' });
+    } catch (error) {
+      console.error(error);
+      res.status(500).json({ message: 'Email failed to send' });
+    }
+
+});
 
 console.log(await head.db_FindUserByID(1));
 

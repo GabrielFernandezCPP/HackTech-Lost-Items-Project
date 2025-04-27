@@ -1,5 +1,5 @@
 import { createContext, useContext, useEffect, useState } from "react";
-import { check_auth, get_login, get_logout } from "../api/requests.mjs";
+import { check_auth, get_login, get_logout, register_user } from "../api/requests.mjs";
 const AuthContext = createContext();
 
 const AuthProvider = ({ children }) => 
@@ -23,13 +23,18 @@ const AuthProvider = ({ children }) =>
         setUser(response_email);
     }
 
+    const register = async (email, password) => {
+        const response_email = await register_user(email, password);
+        setUser(response_email);
+    }
+
     const logout = async () => {
         await get_logout();
         setUser(null);
     }
 
-    return <AuthContext.Provider value={{ user, login, logout, loaded, loginAttempted }}>
-        {!loaded ? "Loading..." : children}
+    return <AuthContext.Provider value={{ user, login, register, logout, loginAttempted }}>
+        {loading ? "Loading..." : children}
     </AuthContext.Provider>
 };
 
