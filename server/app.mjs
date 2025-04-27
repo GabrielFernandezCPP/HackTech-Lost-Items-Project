@@ -5,15 +5,16 @@ import { fileURLToPath } from 'url';
 import { v1, v4 } from 'uuid'
 import { dirname, join } from 'path';
 import session from 'express-session'; // Sessions
-const { body, validationResult } = require('express-validator'); // Middleware for validating requests
+import { body, validationResult } from 'express-validator'; // Middleware for validating requests
 import argon2 from 'argon2'; // Hashing
 import crypto from 'crypto'; // Cryptocurrencies obviously
+import db_connect from './dbsqltest.mjs';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
 const app = express()
 const port = 3000
-
+const database = db_connect();
 const secret = crypto.randomBytes(32).toString('hex');
 
 app.use(session({
@@ -21,8 +22,6 @@ app.use(session({
     resave: false, // don't save session if unmodified
     saveUninitialized: false // don't create session until something stored
 }));
-
-app.use(express.static(join(__dirname, '../dist')));
 
 const read_data = (path) => {
     const raw = fs.readFileSync(path);
@@ -46,17 +45,15 @@ app.get('/', (req, res) => {
 
 app.post('/auth/login', (req, res) => {
     const { username, password } = req.body;
-    const apiResponse = {success: false, user: null, message: null};
+    const apiResponse = {user: null, message: null};
     if (mockUsers[username] && mockUsers[username] === password) {
         req.session.user = { username };
-        apiResponse.success = true;
         apiResponse.user = username;
         apiResponse.message = "Login success";
         res.status(200);
     }
     else
     {
-        apiResponse.success = false;
         apiResponse.user = null;
         apiResponse.message = "Invalid credentials";
         res.status(401);
@@ -70,101 +67,70 @@ app.post('/auth/logout', (req, res) => {
     const apiResponse = {success: true};
     req.session.destroy(() => {
         res.clearCookie('connect.sid');
-        res.status(200).json(apiResponse);
+        res.sendStatus(200);
     });
 });
 
-app.get('/auth/verify', async (req, res) => {
+app.post('/auth/check', async (req, res) => {
     const apiResponse = {success: false, user: null};
     try {
         if (req.session.user)
         {
-            apiResponse.success = true;
-            apiResponse.user = req.session.user;
-            res.status(200);
+            res.sendStatus(200);
         }
         else
         {
-            res.status(401);
+            res.sendStatus(401);
         }
-
-        res.json(apiResponse);
     } catch (error) {
         console.log(error);
+        res.sendStatus(500);
     }
+    res.json(apiResponse);
 })
 
 // Register account in MySQL db. Don't forget to hash!!!!!
-app.post('/auth/register',
-    // Middleware to validate input
-    [
-        body('username').isLength({ min: 3 }).withMessage('Username must be at least 3 characters long'),
-        body('password').isLength({ min: 6 }).withMessage('Password must be at least 6 characters long')
-    ],
-    async (req, res) => {
-        
-    }
+app.post('/auth/register', async (req, res) => {
+    res.sendStatus(501);
+}
 );
 
-app.post('/id', (req, res) =>{
-    var code = req.body.code;
-    var clients_json = read_data("./database/clients.json");
+app.post('/items/new', async (req, res) => {
+    // Validate item name through database
 
-    if (code in clients_json)
-    {
-        return res.json({
-            client: clients_json[code]
-        });
+    // Create new item object with uuid-v4
+    const item = {
+        name: req.body.name, 
+        id: v4()
     }
-    else
+
+    // Add item to database
+
+    // Respond
+}
+);
+
+// 
+app.post('/items/remove', async (req, res) => {
+    if (!req.session.user)
     {
-        res.status(404);
+        res.sendStatus(401);
+        return;
     }
-})
-
-app.post('/add', (req, res) =>{
-    var code = req.body.code;
-    var url = req.body.url;
-    var clients_json = read_data("./database/clients.json");
-
-    if (code in clients_json)
-    {
-        clients_json[code].content_locks.fullBlock.push(url);
-        write_data("./database/clients.json", clients_json);
-    }
-    else
-    {
-        res.status(404);
-    }
-})
-
-app.get('/getclients', (req, res) =>{
-    var clients_json = read_data("./database/clients.json");
-
-    // write_data("./database/clients.json", clients_entries);
-
-    return res.json({
-        clients: clients_json
-    });
-})
-
-app.post('/restrictions', (req, res) => {
-    const code = req.body.code;
-    var users = read_data("./database/clients.json");
     
-    //Should access database to retrieve restrictions
-    if(code in users){
-        res.send(users[code].content_locks);
-    }
-    else
-    {
-        res.status(404);
-    }
-});
+    // Get item id
+    const item_id = req.body.id;
+    // Query database for item
 
-app.get('*', (req, res) => {
-    res.sendFile(join(__dirname, './public/index.html'));
-});
+    // Handle query response. Exists: remove item
+
+    // Respond
+}
+);
+
+// app.get('*', (req, res) => {
+//     res.sendFile(join(__dirname, './public/index.html'));
+// });
 
 app.listen(port, () => {
   console.log(`Example app listening on port ${port}`)

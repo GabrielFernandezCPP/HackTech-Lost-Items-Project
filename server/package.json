@@ -19,11 +19,15 @@
   },
   "dependencies": {
     "argon2": "^0.43.0",
+    "cors": "^2.8.5",
     "crypto": "^1.0.1",
+    "dotenv": "^16.5.0",
     "express": "^5.1.0",
     "express-session": "^1.18.1",
     "express-validator": "^7.2.1",
+    "mysql2": "^3.14.0",
     "path": "^0.12.7",
-    "url": "^0.11.4"
+    "url": "^0.11.4",
+    "uuid": "^11.1.0"
   }
 }
