@@ -7,6 +7,7 @@ import NotFound from './components/NotFound';
 import Register from './components/Register';
 import { useAuth } from './components/AuthProvider';
 import LostItemPage from './components/LostItemPage';
+import AccountPage from './components/AccountPage';
 
 function App() {
     const APP_TITLE = "Title";
@@ -22,6 +23,7 @@ function App() {
                     <Route path="/login" element={!user ? <Login /> : <Navigate to="/dashboard" />} />
                     <Route path="/" element={!user ? <Login /> : <Navigate to="/dashboard" />} />
                     <Route path="/register" element={<Register />} />
+                    <Route path="/account" element={<AccountPage />} />
                     <Route path="*" element={<NotFound />} />
                     <Route path="/lost/:uuid" element={<LostItemPage />} />
                 </Routes>
