@@ -6,8 +6,23 @@ import {v4 as uuidv4} from 'uuid'
 
 configDotenv();
 
-const db_url = process.env.DATABASE_URL;
+const db_url = "https://gxrljirppmwkbkfgoosk.supabase.co";
 const db_key = process.env.DB_ANON_KEY;
+
+export async function db_SetItemState(uuid, state) {
+    try {
+        var response = await supabase
+            .from("lost_items")
+            .update({ status: state})
+            .eq("uuid", uuid);
+    
+    console.log(`${uuid}'s state was updated.`);
+    return true;
+    } catch (err) {
+        console.error('Unexpected error in SET ITEM STATE:', err.message);
+        return null;
+    }
+}
 
 export async function db_AddUser(email, raw_password) {
     try {
