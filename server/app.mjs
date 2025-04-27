@@ -6,9 +6,8 @@ import { v1, v4 } from 'uuid'
 import { dirname, join } from 'path';
 import session from 'express-session'; // Sessions
 import { body, validationResult } from 'express-validator'; // Middleware for validating requests
-import argon2 from 'argon2'; // Hashing
 import crypto from 'crypto'; // Cryptocurrencies obviously
-import { supabase } from './dbsqltest.mjs';
+import { add_user } from './dbsqltest.mjs';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
@@ -26,6 +25,8 @@ const read_data = (path) => {
     const raw = fs.readFileSync(path);
     return JSON.parse(raw);
 }
+
+add_user('johndoe@rand.otcom', 'password123');
 
 const write_data = (path, data) => {
     fs.writeFileSync(path, JSON.stringify(data, null, 4));
