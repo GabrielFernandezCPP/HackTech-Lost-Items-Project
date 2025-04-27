@@ -10,11 +10,11 @@ import crypto from 'crypto'; // Cryptocurrencies obviously
 import * as head from './dbsqltest.mjs';
 import nodemailer from 'nodemailer'
 import dotenv from 'dotenv'
+import nocache from 'nocache';
 
 dotenv.config();
 const emailUsername = process.env.EMAIL_USERNAME;
 const emailPassword = process.env.EMAIL_PASSWORD; 
-
 //import { db_FindPersonByID } from '../src/db/dbheader.mjs';
 
 const __filename = fileURLToPath(import.meta.url);
@@ -79,16 +79,19 @@ app.get('/auth/logout', (req, res) => {
     });
 });
 
-app.get('/auth/check', async (req, res) => {
+app.get('/auth/check', nocache(), async (req, res) => {
     try {
         if (req.session.user)
         {
-            res.sendStatus(200);
+            const email = req.session.user;
+            res.status(200);
+            res.json({ email });
             return;
         }
         else
         {
-            res.sendStatus(401);
+            res.status(401);
+            res.json({ email: null });
             return;
         }
     } catch (error) {
@@ -102,20 +105,19 @@ app.get('/auth/check', async (req, res) => {
 // Register account in MySQL db. Don't forget to hash!!!!!
 app.post('/auth/register', async (req, res) => {
     const { email, password } = req.body;
-    const added_row = db_AddUser(email, password);
+    const added_row = await head.db_AddUser(email, password);
 
+    console.log(`Added row: ${added_row}`);
+    
     if (added_row) {
         let email = added_row[0].email;
         req.session.user = { email };
         res.json({ email: email });
         res.status(200);
-        return;
     }
-    else
-    {
-        res.sendStatus(500);
-        return;
-    }
+    else res.sendStatus(500);
+
+    return added_row;
 }
 );
 
@@ -185,7 +187,8 @@ app.post('/api/contact-owner', async (req, res) => {
       console.error(error);
       res.status(500).json({ message: 'Email failed to send' });
     }
-  });
+
+});
 
 console.log(await head.db_FindUserByID(1));
 

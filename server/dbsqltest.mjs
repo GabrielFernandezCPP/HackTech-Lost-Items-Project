@@ -21,6 +21,7 @@ export async function db_AddUser(email, raw_password) {
 
         if (error) {
             console.error('Error inserting user:', error.message);
+            //alert("User already exists.");
             return null;
         }
         return data[0].email;
@@ -84,6 +85,21 @@ export function db_CreateDB(con) {
     con.query("CREATE TABLE people (name VARCHAR(255), id INT, pass VARCHAR(255))");
 
     return con;
+}
+
+export async function db_CheckIfPersonExists(email) {
+    try {
+        //Check if email exists;
+        const { data, error } = await supabase
+            .from("Users")
+            .select("*")
+            .eq("email", email);
+        
+        var notInDB = (data.length == 0);
+    } catch (err) {
+        console.error("UNEXPECTED ERROR!: ", err.message);
+        return null;
+    }
 }
 
 export async function db_CheckIfItemOwnerExistsAndDeleteIfNot(email) {

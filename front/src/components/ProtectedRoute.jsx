@@ -1,11 +1,13 @@
-import { Navigate } from "react-router-dom";
+import { Navigate, useLocation } from "react-router-dom";
 import { useAuth } from "./AuthProvider";
 import { useEffect } from "react";
 
 const ProtectedRoute = ({ children }) => {
-    const { user } = useAuth();
+    const { user, loaded } = useAuth();
+    const location = useLocation();
 
-    console.log(user);
+    if (!loaded)
+        return null;
 
     if (user)
     {
@@ -13,7 +15,7 @@ const ProtectedRoute = ({ children }) => {
     }
     else 
     {
-        return <Navigate to="/login" />;
+        return <Navigate to="/login" replace state={{ from: location }} />;
     }
 };
 

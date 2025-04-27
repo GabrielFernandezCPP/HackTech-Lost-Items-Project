@@ -1,25 +1,30 @@
 import { createContext, useContext, useEffect, useState } from "react";
-import { check_auth, get_login, get_logout } from "../api/requests.mjs";
+import { check_auth, get_login, get_logout, register_user } from "../api/requests.mjs";
 const AuthContext = createContext();
 
 const AuthProvider = ({ children }) => 
 {
-    const [user, setUser] = useState('a');
-    const [loading, setLoading] = useState(false);
+    const [user, setUser] = useState(null);
+    const [loaded, setLoaded] = useState(false);
     const [loginAttempted, setLoginAttempted] = useState(false);
 
     const check_auth_effect = async () => {
-        let auth_check_response = await check_auth();
-        if (!auth_check_response)
-            setUser(null);
+        let user_email = await check_auth();
+        setUser(user_email);
+        setLoaded(true);
     }
 
     useEffect(() => {
         check_auth_effect();   
-    }, [])
+    }, []);
 
     const login = async (email, password) => {
         const response_email = await get_login(email, password);
+        setUser(response_email);
+    }
+
+    const register = async (email, password) => {
+        const response_email = await register_user(email, password);
         setUser(response_email);
     }
 
@@ -28,8 +33,8 @@ const AuthProvider = ({ children }) =>
         setUser(null);
     }
 
-    return <AuthContext.Provider value={{ user, login, logout, loginAttempted }}>
-        {loading ? "Loading..." : children}
+    return <AuthContext.Provider value={{ user, login, register, loaded, logout, loginAttempted }}>
+        {!loaded ? "Loading..." : children}
     </AuthContext.Provider>
 };
 
