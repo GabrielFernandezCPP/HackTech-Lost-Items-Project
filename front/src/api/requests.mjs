@@ -3,6 +3,8 @@ import axios from 'axios'
 const API_URL = import.meta.env.VITE_API_URL;
 const DEV_MODE = import.meta.env.VITE_SET_DEV;
 
+axios.defaults.withCredentials = true;
+
 // Axios request
 
 export const get_login = async (email, password) => {
@@ -13,7 +15,7 @@ export const get_login = async (email, password) => {
                 email: email, 
                 password: password
             });
-        return res.data;
+        return res.data.email;
     } catch (error) {
         console.error(error.message);
         return null;
@@ -48,7 +50,7 @@ export const register_user = async (email, password) => {
 export const check_auth = async () => {
     try {
         const res = await axios.get(`${API_URL}/auth/check`);
-        return true;
+        return res.status == 200;
     } catch (error) {
         console.error(error.message);
         return false;

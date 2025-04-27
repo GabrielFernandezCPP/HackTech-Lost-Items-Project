@@ -4,24 +4,28 @@ const AuthContext = createContext();
 
 const AuthProvider = ({ children }) => 
 {
-    const [user, setUser] = useState(null);
+    const [user, setUser] = useState('a');
     const [loading, setLoading] = useState(false);
     const [loginAttempted, setLoginAttempted] = useState(false);
 
-    useEffect(() => {
-        if (!check_auth())
-        {
+    const check_auth_effect = async () => {
+        let auth_check_response = await check_auth();
+        if (!auth_check_response)
             setUser(null);
-        }
+    }
+
+    useEffect(() => {
+        check_auth_effect();   
     }, [])
 
     const login = async (email, password) => {
-        const user = await get_login(email, password);
-        setUser(user);
+        const response_email = await get_login(email, password);
+        setUser(response_email);
     }
 
     const logout = async () => {
         await get_logout();
+        setUser(null);
     }
 
     return <AuthContext.Provider value={{ user, login, logout, loginAttempted }}>
