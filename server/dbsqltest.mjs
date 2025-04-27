@@ -1,27 +1,20 @@
-import mysql2 from 'mysql2';
+import postgres from 'postgres';
 import { configDotenv } from 'dotenv';
 
 configDotenv();
 
-const pass = process.env.PASSWORD;
-const db_location = process.env.DB_LOCATION;
+const db_url = process.env.DATABASE_URL;
 
-console.log(db_location)
-console.log(pass)
+console.log(db_url);
 
-const db_connect = () => {
-    const con = mysql2.createConnection({
-        host: db_location,
-        user: "hacktech",
-        password: pass
-    });
-
-    con.connect(function(err) {
+export function db_CreateDB(con) {
+    con.query("CREATE DATABASE " + con.database, function (err, result) {
         if (err) throw err;
-        console.log("Connected!");
+        console.log("Created database.");
     });
+    con.query("CREATE TABLE people (name VARCHAR(255), id INT, pass VARCHAR(255))");
 
     return con;
 }
 
-export default db_connect;
+export const database = postgres(db_url); 

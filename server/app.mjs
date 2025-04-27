@@ -8,13 +8,12 @@ import session from 'express-session'; // Sessions
 import { body, validationResult } from 'express-validator'; // Middleware for validating requests
 import argon2 from 'argon2'; // Hashing
 import crypto from 'crypto'; // Cryptocurrencies obviously
-import db_connect from './dbsqltest.mjs';
+import { database } from './dbsqltest.mjs';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
-const app = express()
-const port = 3000
-const database = db_connect();
+const app = express();
+const port = 3000;
 const secret = crypto.randomBytes(32).toString('hex');
 
 app.use(session({
