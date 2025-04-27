@@ -18,11 +18,9 @@ export async function db_AddUser(email, raw_password) {
         const { data, error } = await supabase
             .from('Users')
             .insert([
-                { email: email, password: hashed_password }
+                { email: email, password: hashed_password, items: [] }
             ])
             .select();
-                { email: email, password: hashed_password, items : [] }
-            ]);
 
         if (error) {
             console.error('Error inserting user:', error.message);
@@ -75,13 +73,27 @@ export async function db_GetItemsFromUser(email) {
             .eq("email", email)
             .single();
         
-        
-        
         if (ids_query.data != null)
         {
-            
+            var arr = ids_query.data.items;
+            console.log(arr);
+
+            var retArr = [];
+
+            for (let i of arr)
+            {
+                var loop = await supabase
+                    .from("lost_items")
+                    .select()
+                    .eq("id", i);
+
+                retArr.push(loop.data);
+            }
+
+            return true;
         }
 
+        console.log("User has an invalid item array.");
         return null;
     } catch (err) {
         console.error("UNEXPECTED ERROR!: ", err.message);
