@@ -1,47 +1,117 @@
+import { useParams } from 'react-router-dom';
+import { createClient } from '@supabase/supabase-js';
+import { useState, useEffect } from 'react';
+
+const supabaseUrl = import.meta.env.VITE_DATABASE_URL;
+const supabaseKey = import.meta.env.VITE_DB_ANON_KEY;
+const supabase = createClient(supabaseUrl, supabaseKey);
+
 const LostItemPage = () => {
 
-    const handleContactOwner = async () => {
-        console.log('Button clicked!');
-        const res = await fetch('http://localhost:3000/api/contact-owner', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({
-            ownerEmail: 'kevinjnev@gmail.com',
-            itemName: 'Black Backpack',
-            finderMessage: 'Hi, I found your black backpack near the library.'
-          })
-        });
-      
-        const data = await res.json();
-        alert(data.message);
+
+  
+  const {uuid} = useParams();
+  const [lostItem, setLostItem] = useState(null);
+  const [loading, setLoading] = useState(true);
+  const [notFound, setNotFound] = useState(false);
+  const [finderMessage, setFinderMessage] = useState(''); // 👈 new state for user message
+
+  
+  useEffect(() => {
+    const fetchLostItem = async () => {
+      console.log('Fetching lost item with UUID:', `"${uuid}"`);
+
+      const { data, error } = await supabase
+        .from('lost_items')
+        .select('owner_email, item_name, item_description')
+        .eq('uuid', uuid)
+        .single();  // Expect exactly one matching row
+
+      console.log('Fetch result:', data, error);
+
+      if (error || !data) {
+        setNotFound(true);
+      } else {
+        setLostItem(data);
+      }
+
+      setLoading(false);
+    };
+
+    if (uuid) {
+      fetchLostItem();
+    }
+  }, [uuid]);
+
+
+  if (loading) {
+    return <div className="text-center p-10">Loading item details...</div>;
+  }
+
+  if (notFound) {
+    return <div className="text-center p-10 text-red-500">Item not found 😢</div>;
+  }
+
+  
+
+  const handleContactOwner = async () => {
+    if (!finderMessage.trim()) {
+      alert('Please type a message before sending.');
+      return;
     }
 
 
+    console.log('Button clicked!');
+    const res = await fetch('http://localhost:3000/api/contact-owner', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        ownerEmail: lostItem.owner_email,
+        itemName: lostItem.item_name,
+        finderMessage: finderMessage
+      })
+    });
+
+    const data = await res.json();
+    alert(data.message);
+  }
+
+
   return (
-    <div className="bg-gray-100 min-h-screen flex items-center justify-center">
-      <div className="bg-white p-8 rounded-lg shadow-lg text-center max-w-md w-full">
-        {/* Big Header */}
-        <h1 className="text-3xl font-bold text-green-600 mb-4">
+    <div className="flex items-center justify-center min-h-screen bg-gray-100 px-4">
+      <div className="bg-white p-6 rounded-lg shadow-lg w-full max-w-md text-center">
+        <h1 className="text-2xl md:text-3xl font-bold text-green-600 mb-6 break-words">
           You found a lost item!
         </h1>
 
-        {/* Item Name */}
-        <h2 className="text-xl font-semibold mb-2">
-          Item Name
+        {/* Item Info */}
+        <h2 className="text-xl md:text-2xl font-semibold mb-4 break-words">
+          {lostItem.item_name}
         </h2>
-
-        {/* Item Description */}
-        <p className="text-gray-600 mb-4">
-          Item Description
+        <p className="text-gray-700 mb-6 break-words whitespace-pre-wrap">
+          {lostItem.item_description}
+        </p>
+        <p className="text-gray-500 text-sm mb-8 break-words">
+          Owner Contact: {lostItem.owner_email}
         </p>
 
-        {/* Contact Owner Button */}
-        <button 
-          onClick={handleContactOwner}
-          className="bg-green-500 hover:bg-green-600 text-white font-bold py-2 px-6 rounded"
-        >
-          Send Message To Owner
-        </button>
+        {/* Contact Owner Form */}
+        <div className="flex flex-col gap-4">
+          <textarea
+            value={finderMessage}
+            onChange={(e) => setFinderMessage(e.target.value)}
+            placeholder="Type a message to the owner here. Help them reunite with their lost goods."
+            rows="5"
+            className="w-full p-3 border rounded resize-none"
+          ></textarea>
+
+          <button
+            onClick={handleContactOwner}
+            className="bg-green-500 hover:bg-green-600 text-white font-bold py-3 px-6 rounded text-lg"
+          >
+            Send Message
+          </button>
+        </div>
 
         {/* Thank You Footer */}
         <p className="text-gray-400 text-xs mt-6">
@@ -50,7 +120,7 @@ const LostItemPage = () => {
       </div>
     </div>
   );
-}
 
+};
 
 export default LostItemPage;

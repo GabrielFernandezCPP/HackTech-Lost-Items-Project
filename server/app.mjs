@@ -174,8 +174,8 @@ app.post('/api/contact-owner', async (req, res) => {
     const mailOptions = {
       from: emailUsername,
       to: ownerEmail,
-      subject: `Someone found your item: ${itemName}`,
-      text: "finder message test, this is what the user inputs"
+      subject: `Someone found your item: ${itemName}!`,
+      text: `They left you this message:\n${finderMessage}`
     };
   
     try {
