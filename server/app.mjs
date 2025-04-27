@@ -49,15 +49,12 @@ app.use(session({
 
 // Change for production
 app.use(cors({
-    origin: "http://localhost:5173", 
+    origin: ['http://localhost:5173', '*'],
+    methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH', 'OPTIONS'], 
     credentials: true
 }))
 app.use(express.json());
 app.use(express.static("./public"));
-
-app.get('/', (req, res) => {
-  res.send('Hello World!')
-})
 
 app.post('/auth/login', async (req, res) => {
     const { email, password } = req.body;
@@ -203,6 +200,10 @@ app.post('/api/contact-owner', async (req, res) => {
       res.status(500).json({ message: 'Email failed to send' });
     }
 
+});
+
+app.use((req, res) => {
+    res.sendFile(join(__dirname, 'public', 'index.html'));
 });
 
 // await head.db_GetItemsFromUser("john@email");//head.db_AddItem("john@email", "Biscut", "A biscut.", NEUTRAL);

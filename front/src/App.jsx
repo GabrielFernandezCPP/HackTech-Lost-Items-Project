@@ -15,8 +15,8 @@ function App() {
     return (
     <>
         <div className="flex h-screen w-screen">
-            {user ? <Navbar></Navbar> : null}
             <BrowserRouter>
+                <Navbar></Navbar>
                 <Routes>
                     <Route path="/dashboard" element={<ProtectedRoute><Dashboard /></ProtectedRoute>} />
                     <Route path="/login" element={!user ? <Login /> : <Navigate to="/dashboard" />} />

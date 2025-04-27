@@ -1,6 +1,7 @@
 import { useParams } from 'react-router-dom';
 import { createClient } from '@supabase/supabase-js';
 import { useState, useEffect } from 'react';
+import NotFound from './NotFound';
 
 const supabaseUrl = import.meta.env.VITE_DATABASE_URL;
 const supabaseKey = import.meta.env.VITE_DB_ANON_KEY;
@@ -49,7 +50,7 @@ const LostItemPage = () => {
   }
 
   if (notFound) {
-    return <div className="text-center p-10 text-red-500">Item not found 😢</div>;
+    return <NotFound></NotFound>;
   }
 
   
@@ -78,8 +79,8 @@ const LostItemPage = () => {
 
 
   return (
-    <div className="flex items-center justify-center min-h-screen bg-gray-100 px-4">
-      <div className="bg-white p-6 rounded-lg shadow-lg w-full max-w-md text-center">
+    <div className="flex items-center justify-center max-w-full bg-gray-100 px-4">
+      <div className="bg-white p-6 rounded-lg shadow-lg w-full text-center">
         <h1 className="text-2xl md:text-3xl font-bold text-green-600 mb-6 break-words">
           You found a lost item!
         </h1>

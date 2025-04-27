@@ -36,7 +36,7 @@ const AuthProvider = ({ children }) =>
     }
 
     return <AuthContext.Provider value={{ user, login, register, loaded, logout, loginAttempted }}>
-        {!loaded ? "Loading..." : children}
+        {!loaded ? <div className="text-center p-10">Loading page...</div> : children}
     </AuthContext.Provider>
 };
 
