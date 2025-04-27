@@ -141,7 +141,7 @@ app.post('/items/new', async (req, res) => {
 
 app.post('/items/get', async (req, res) => {
     // Validate item name through database
-    const email = req.session.user;
+    const email = req.session.user.email;
     const items = await head.db_GetItemsFromUser(email);
 
     console.log(items)
@@ -205,6 +205,6 @@ app.post('/api/contact-owner', async (req, res) => {
 
 });
 
-await head.db_GetItemsFromUser("john@email");//head.db_AddItem("john@email", "Biscut", "A biscut.", NEUTRAL);
+// await head.db_GetItemsFromUser("john@email");//head.db_AddItem("john@email", "Biscut", "A biscut.", NEUTRAL);
 
 //console.log(await head.db_CheckIfItemOwnerExistsAndDeleteIfNot("johndoe@rand.otcom"));

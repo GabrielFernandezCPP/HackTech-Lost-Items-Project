@@ -9,6 +9,7 @@ function ViewClientPage() {
     
     const update_items = async () => {
         const items = await get_items();
+        console.log(items)
         setItems(items);
     }
 
@@ -16,7 +17,7 @@ function ViewClientPage() {
         update_items();
     }, [])
 
-    return (<div className="h-screen ml-6 mr-6 p-1">
+    return (<div className="h-screen ml-6 mr-6 p-1 w-full">
         <div className="text-3xl mb-5">Your Items</div>
         <div className="overflow-y-auto h-full">
             <div className="grid lg:grid-cols-6 md:grid-cols-3 sm:border-0 sm:grid-cols-2 grid-cols-1 sm:gap-4 gap-1 max-h-full">

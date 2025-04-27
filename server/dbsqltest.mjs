@@ -67,6 +67,7 @@ export async function db_GetPasswordHash(email) {
 
 export async function db_GetItemsFromUser(email) {
     try {
+        console.log(email)
         const ids_query = await supabase
             .from("Users")
             .select("items")
@@ -85,12 +86,13 @@ export async function db_GetItemsFromUser(email) {
                 var loop = await supabase
                     .from("lost_items")
                     .select()
-                    .eq("id", i);
+                    .eq("id", i)
+                    .single();
 
                 retArr.push(loop.data);
             }
 
-            return true;
+            return retArr;
         }
 
         console.log("User has an invalid item array.");
