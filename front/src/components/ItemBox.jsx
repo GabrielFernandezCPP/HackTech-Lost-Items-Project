@@ -6,6 +6,8 @@ function status_to_style(status)
             return "bg-red-500";
         case 2:
             return "bg-healthygreen animate-pulse";
+        case -1:
+            return "bg-white";
         default:
             return "bg-gray-400";
     }
@@ -18,6 +20,8 @@ function status_to_text(status)
             return "Lost";
         case 2:
             return "Found";
+        case -1:
+            return "";
         default:
             return "Not Lost";
     }

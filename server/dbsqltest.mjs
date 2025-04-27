@@ -111,7 +111,7 @@ export async function db_GetItemsFromUser(email) {
 
             //Add the default item to the list of items ONLY if there are less than maxitems
 
-            if (arr.length() < MAX_ITEMS)
+            if (arr.length < MAX_ITEMS)
             {
                 retArr.push({
                     id: -1,
