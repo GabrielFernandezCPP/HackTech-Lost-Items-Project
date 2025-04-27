@@ -112,7 +112,7 @@ app.post('/auth/register', async (req, res) => {
     console.log(`Added row: ${added_row}`);
     
     if (added_row != null) {
-        let email = added_row[0].email;
+        let email = added_row.email;
         req.session.user = { email };
         res.json({ email: email });
         res.status(200);
@@ -123,15 +123,18 @@ app.post('/auth/register', async (req, res) => {
 });
 
 app.post('/items/new', async (req, res) => {
-    // Validate item name through database
+    const email = req.session.user;
+    const item = req.body.item;
+    const added_row = await head.db_AddItem(email, item.name, item.description, 0);
 
-    // Create new item object with uuid-v4
-    const item = {
-        name: req.body.name, 
-        id: v4()
+    if (added_row != null) {
+        let name = added_row.item_name;
+        let description = added_row.item_description;
+        res.json({ name: name, description: description });
+        res.status(200);
+        return;
     }
-
-    // Add item to database
+    else res.sendStatus(500);
 
     // Respond
 }
