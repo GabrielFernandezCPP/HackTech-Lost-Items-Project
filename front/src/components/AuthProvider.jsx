@@ -1,5 +1,5 @@
 import { createContext, useContext, useEffect, useState } from "react";
-import { get_login } from "../api/requests.mjs";
+import { get_login, get_logout } from "../api/requests.mjs";
 const AuthContext = createContext();
 
 const AuthProvider = ({ children }) => 
@@ -22,13 +22,13 @@ const AuthProvider = ({ children }) =>
         return response;
     }
 
-    const login = async (username, password) => {
-        const user = await get_login(username, password);
+    const login = async (email, password) => {
+        const user = await get_login(email, password);
         setUser(user);
     }
 
     const logout = async () => {
-    
+        await get_logout();
     }
 
     return <AuthContext.Provider value={{ user, login, logout, loginAttempted }}>

@@ -26,8 +26,6 @@ const read_data = (path) => {
     return JSON.parse(raw);
 }
 
-add_user('johndoe@rand.otcom', 'password123');
-
 const write_data = (path, data) => {
     fs.writeFileSync(path, JSON.stringify(data, null, 4));
 }
@@ -63,8 +61,7 @@ app.post('/auth/login', (req, res) => {
     res.json(apiResponse);
 });
 
-app.post('/auth/logout', (req, res) => {
-    const apiResponse = {success: true};
+app.get('/auth/logout', (req, res) => {
     req.session.destroy(() => {
         res.clearCookie('connect.sid');
         res.sendStatus(200);

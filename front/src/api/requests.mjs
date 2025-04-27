@@ -1,12 +1,18 @@
 import axios from 'axios'
 
 const API_URL = import.meta.env.VITE_API_URL;
+const DEV_MODE = import.meta.env.API_SET_DEV;
 
 // Axios request
 
-export const get_login = async () => {
+export const get_login = async (email, password) => {
     try {
-        const res = await axios.get(`${API_URL}/auth/login`);
+        const res = await axios.post(
+            `${API_URL}/auth/login`, 
+            {
+                email: email, 
+                password: password
+            });
         return res.data;
     } catch (error) {
         console.error(error.message);
@@ -14,4 +20,37 @@ export const get_login = async () => {
     }
 }
 
+export const get_logout = async () => {
+    try {
+        const res = await axios.get(`${API_URL}/auth/logout`);
+    } catch (error) {
+        console.error(error.message);
+        return null;
+    }
+}
 
+export const register_user = async (email, password) => {
+    try {
+        const res = await axios.post(
+            `${API_URL}/auth/register`, 
+            {
+                email: email, 
+                password: password
+            }
+        );
+        return res.data;
+    } catch (error) {
+        console.error(error.message);
+        return null;
+    }
+}
+
+export const check_auth = async () => {
+    try {
+        const res = await axios.get(`${API_URL}/auth/check`);
+        return true;
+    } catch (error) {
+        console.error(error.message);
+        return false;
+    }
+}
