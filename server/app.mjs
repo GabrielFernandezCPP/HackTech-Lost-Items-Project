@@ -217,6 +217,7 @@ app.use((req, res) => {
     res.sendFile(join(__dirname, 'public', 'index.html'));
 });
 
-// await head.db_GetItemsFromUser("john@email");//head.db_AddItem("john@email", "Biscut", "A biscut.", NEUTRAL);
-
+// await head.db_GetItemsFromUser("john@email");//
+//head.db_AddItem("john@email", "Beach Ball", "A beach ball.", NEUTRAL);
+//head.db_RemoveItem("john@email", 36);
 //console.log(await head.db_CheckIfItemOwnerExistsAndDeleteIfNot("johndoe@rand.otcom"));
