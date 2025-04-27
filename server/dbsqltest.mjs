@@ -16,7 +16,7 @@ export async function db_SetItemState(uuid, state) {
             .update({ status: state})
             .eq("uuid", uuid);
     
-    console.log(`${uuid}'s state was updated.`);
+    console.log(`${uuid}'s state was updated to ${state}.`);
     return true;
     } catch (err) {
         console.error('Unexpected error in SET ITEM STATE:', err.message);

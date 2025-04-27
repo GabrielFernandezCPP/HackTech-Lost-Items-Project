@@ -205,7 +205,7 @@ app.post('/api/contact-owner', async (req, res) => {
 
 });
 
-await head.db_SetItemState("dcbe2446-b955-404b-88ee-dba222c4f9eb", LOST);
+await head.db_SetItemState("dcbe2446-b955-404b-88ee-dba222c4f9eb", FOUND);
 
 // await head.db_GetItemsFromUser("john@email");//head.db_AddItem("john@email", "Biscut", "A biscut.", NEUTRAL);
 
