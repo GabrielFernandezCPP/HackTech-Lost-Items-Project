@@ -1,11 +1,10 @@
-import postgres from 'postgres';
+import { createClient } from '@supabase/supabase-js';
 import { configDotenv } from 'dotenv';
 
 configDotenv();
 
 const db_url = process.env.DATABASE_URL;
-
-console.log(db_url);
+const db_key = process.env.DB_ANON_KEY;
 
 export function db_CreateDB(con) {
     con.query("CREATE DATABASE " + con.database, function (err, result) {
@@ -17,4 +16,4 @@ export function db_CreateDB(con) {
     return con;
 }
 
-export const database = postgres(db_url); 
+export const supabase = createClient(db_url, db_key);

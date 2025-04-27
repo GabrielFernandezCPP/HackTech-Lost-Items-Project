@@ -8,7 +8,7 @@ import session from 'express-session'; // Sessions
 import { body, validationResult } from 'express-validator'; // Middleware for validating requests
 import argon2 from 'argon2'; // Hashing
 import crypto from 'crypto'; // Cryptocurrencies obviously
-import { database } from './dbsqltest.mjs';
+import { supabase } from './dbsqltest.mjs';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
