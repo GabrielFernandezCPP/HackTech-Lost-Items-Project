@@ -7,7 +7,8 @@ import { dirname, join } from 'path';
 import session from 'express-session'; // Sessions
 import { body, validationResult } from 'express-validator'; // Middleware for validating requests
 import crypto from 'crypto'; // Cryptocurrencies obviously
-import { add_user } from './dbsqltest.mjs';
+import { db_AddUser, db_FindUserByID, db_ValidatePassword } from './dbsqltest.mjs';
+//import { db_FindPersonByID } from '../src/db/dbheader.mjs';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
@@ -42,23 +43,17 @@ app.get('/', (req, res) => {
 })
 
 app.post('/auth/login', (req, res) => {
-    const { username, password } = req.body;
-    const apiResponse = {user: null, message: null};
-    if (mockUsers[username] && mockUsers[username] === password) {
-        req.session.user = { username };
-        apiResponse.user = username;
-        apiResponse.message = "Login success";
+    const { email, password } = req.body;
+
+    if (db_ValidatePassword(email, password)) {
+        req.session.user = { email };
+        res.json({ email: email });
         res.status(200);
     }
     else
     {
-        apiResponse.user = null;
-        apiResponse.message = "Invalid credentials";
-        res.status(401);
+        res.sendStatus(401);
     }
-
-
-    res.json(apiResponse);
 });
 
 app.get('/auth/logout', (req, res) => {
@@ -88,7 +83,19 @@ app.post('/auth/check', async (req, res) => {
 
 // Register account in MySQL db. Don't forget to hash!!!!!
 app.post('/auth/register', async (req, res) => {
-    res.sendStatus(501);
+    const { email, password } = req.body;
+    const added_row = db_AddUser(email, password);
+
+    if (added_row) {
+        let email = added_row[0].email;
+        req.session.user = { email };
+        res.json({ email: email });
+        res.status(200);
+    }
+    else
+    {
+        res.sendStatus(500);
+    }
 }
 );
 
@@ -132,3 +139,5 @@ app.post('/items/remove', async (req, res) => {
 app.listen(port, () => {
   console.log(`Example app listening on port ${port}`)
 })
+
+console.log(await db_FindUserByID(1));

@@ -1,7 +1,7 @@
 import axios from 'axios'
 
 const API_URL = import.meta.env.VITE_API_URL;
-const DEV_MODE = import.meta.env.API_SET_DEV;
+const DEV_MODE = import.meta.env.VITE_SET_DEV;
 
 // Axios request
 

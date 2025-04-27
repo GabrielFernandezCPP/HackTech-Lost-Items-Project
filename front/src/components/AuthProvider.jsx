@@ -1,5 +1,5 @@
 import { createContext, useContext, useEffect, useState } from "react";
-import { get_login, get_logout } from "../api/requests.mjs";
+import { check_auth, get_login, get_logout } from "../api/requests.mjs";
 const AuthContext = createContext();
 
 const AuthProvider = ({ children }) => 
@@ -8,19 +8,12 @@ const AuthProvider = ({ children }) =>
     const [loading, setLoading] = useState(false);
     const [loginAttempted, setLoginAttempted] = useState(false);
 
-    const handleAuthResponse = (response) => {
-        if (response.success)
-        {
-            setUser(response.user);
-        }
-        else
+    useEffect(() => {
+        if (!check_auth())
         {
             setUser(null);
         }
-
-        setLoading(false);
-        return response;
-    }
+    }, [])
 
     const login = async (email, password) => {
         const user = await get_login(email, password);
