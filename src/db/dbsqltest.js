@@ -1,15 +1,15 @@
-var mysql2 = require('mysql2');
-var env = require('dotenv');
+import * as src from "./dbheader.mjs";
 
-var pass = process.env.PASSWORD;
+console.log("1");
+var con = src.db_Init();
 
-var con = mysql2.createConnection({
-  host: "localhost",
-  user: "root",
-  password: pass
-});
+/*
+console.log("2");
+con = src.db_CreateDB(con);
 
-con.connect(function(err) {
-  if (err) throw err;
-  console.log("Connected!");
-});
+console.log("3");
+con = src.db_AddPerson(con, "Gabriel", 0, "black");
+
+console.log("4");
+console.log(src.db_FindPersonByID(con, 0));
+*/
