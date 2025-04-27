@@ -12,6 +12,10 @@ import nodemailer from 'nodemailer'
 import dotenv from 'dotenv'
 import nocache from 'nocache';
 
+const NEUTRAL = 0;
+const LOST = 1;
+const FOUND = 2;
+
 dotenv.config();
 const emailUsername = process.env.EMAIL_USERNAME;
 const emailPassword = process.env.EMAIL_PASSWORD; 
@@ -187,8 +191,8 @@ app.post('/api/contact-owner', async (req, res) => {
     const mailOptions = {
       from: emailUsername,
       to: ownerEmail,
-      subject: `Someone found your item: ${itemName}`,
-      text: "finder message test, this is what the user inputs"
+      subject: `Someone found your item: ${itemName}!`,
+      text: `They left you this message:\n${finderMessage}`
     };
   
     try {
@@ -201,6 +205,6 @@ app.post('/api/contact-owner', async (req, res) => {
 
 });
 
-console.log(await head.db_FindUserByID(1));
+await head.db_GetItemsFromUser("john@email");//head.db_AddItem("john@email", "Biscut", "A biscut.", NEUTRAL);
 
 //console.log(await head.db_CheckIfItemOwnerExistsAndDeleteIfNot("johndoe@rand.otcom"));
