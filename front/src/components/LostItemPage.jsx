@@ -1,7 +1,9 @@
 import { useParams } from 'react-router-dom';
 import { createClient } from '@supabase/supabase-js';
 import { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 import NotFound from './NotFound';
+import Loading from './Loading'
 
 const supabaseUrl = import.meta.env.VITE_DATABASE_URL;
 const supabaseKey = import.meta.env.VITE_DB_ANON_KEY;
@@ -9,44 +11,45 @@ const supabase = createClient(supabaseUrl, supabaseKey);
 
 const LostItemPage = () => {
 
-
-  
+  const navigate = useNavigate();
   const {uuid} = useParams();
   const [lostItem, setLostItem] = useState(null);
   const [loading, setLoading] = useState(true);
-  const [notFound, setNotFound] = useState(false);
-  const [finderMessage, setFinderMessage] = useState(''); // 👈 new state for user message
+  const [finderMessage, setFinderMessage] = useState(''); // new state for user message
 
   
   useEffect(() => {
     const fetchLostItem = async () => {
       console.log('Fetching lost item with UUID:', `"${uuid}"`);
-
-      const { data, error } = await supabase
-        .from('lost_items')
-        .select('owner_email, item_name, item_description')
-        .eq('uuid', uuid)
-        .single();  // Expect exactly one matching row
-
-      console.log('Fetch result:', data, error);
+      try {
+        const { data, error } = await supabase
+          .from('lost_items')
+          .select('owner_email, item_name, item_description')
+          .eq('uuid', uuid)
+          .single();  // Expect exactly one matching row
 
       if (error || !data) {
-        setNotFound(true);
-      } else {
+        console.error('Item not found, redirecting...');
+        navigate('/errorpage'); // Redirect to 404 page
+      } 
+      else {
         setLostItem(data);
       }
-
-      setLoading(false);
+      }catch (err) {
+        console.error('Error fetching item:', err);
+        navigate('/'); // Redirect on fetch error too
+      }finally {
+        setLoading(false);
+      }
     };
 
     if (uuid) {
       fetchLostItem();
     }
-  }, [uuid]);
-
+  }, [uuid,navigate]);
 
   if (loading) {
-    return <div className="text-center p-10">Loading item details...</div>;
+    return <Loading></Loading>
   }
 
   if (notFound) {
@@ -79,10 +82,10 @@ const LostItemPage = () => {
 
 
   return (
-    <div className="flex items-center justify-center max-w-full bg-gray-100 px-4">
-      <div className="bg-white p-6 rounded-lg shadow-lg w-full text-center">
+    <div className="flex items-center justify-center min-h-screen min-w-screen bg-gray-100 px-4">
+      <div className="bg-white p-6 rounded-lg shadow-lg w-full max-w-md text-center">
         <h1 className="text-2xl md:text-3xl font-bold text-green-600 mb-6 break-words">
-          You found a lost item!
+        You found a lost item!
         </h1>
 
         {/* Item Info */}

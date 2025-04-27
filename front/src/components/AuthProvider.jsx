@@ -1,5 +1,6 @@
 import { createContext, useContext, useEffect, useState } from "react";
 import { check_auth, get_login, get_logout, register_user } from "../api/requests.mjs";
+import Loading from "./Loading";
 const AuthContext = createContext();
 
 const AuthProvider = ({ children }) => 
@@ -36,7 +37,7 @@ const AuthProvider = ({ children }) =>
     }
 
     return <AuthContext.Provider value={{ user, login, register, loaded, logout, loginAttempted }}>
-        {!loaded ? <div className="text-center p-10">Loading page...</div> : children}
+        {!loaded ? <Loading></Loading> : children}
     </AuthContext.Provider>
 };
 

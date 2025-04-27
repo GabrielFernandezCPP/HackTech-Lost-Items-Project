@@ -2,7 +2,8 @@ import { useEffect, useState } from "react";
 import ItemBox from "./ItemBox"
 import { get_items } from "../api/requests.mjs";
 
-const APP_URL = import.meta.env.VITE_API_URL;
+// const APP_URL = import.meta.env.VITE_API_URL;
+const APP_URL = 'http://localhost:5173';
 
 function ViewClientPage() {
     const [items, setItems] = useState([]);
@@ -25,7 +26,7 @@ function ViewClientPage() {
                 (items == null) ?
                 <div>No Items Available. Add new item (button)</div> :
                 items.map((object) =>{
-                    return <ItemBox key={object.id} destination={`${APP_URL}/${object.uuid}`} status={object.status} name={object.item_name} description={object.item_description}></ItemBox>
+                    return <ItemBox key={object.id} destination={`${APP_URL}/item/${object.uuid}`} status={object.status} name={object.item_name} description={object.item_description}></ItemBox>
                 })}
             </div>
         </div>

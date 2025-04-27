@@ -18,14 +18,14 @@ function Navbar(props) {
     return (
     <>
         <div className={`flex flex-col sticky justify-between sm:w-40 text-xl h-full bg-healthygreen p-3`}>
-            <a href="/" className="flex flex-row justify-between items-center text-md text-end bg-white w-full p-1 rounded-sm">
+            <a href="/" className="flex flex-row justify-center items-center text-md bg-white w-full p-1 rounded-sm">
                 <span>Home</span>
             </a>
             <div className="flex flex-col space-y-2">
-                <a href="/account" className="flex flex-row justify-between items-center text-md text-end bg-white w-full p-1 rounded-sm">
+                <a href="/account" className="flex flex-row justify-center items-center text-md bg-white w-full p-1 rounded-sm">
                     <span>Account</span>
                 </a>
-                <a href="/login" onClick={logout} className="flex flex-row justify-between items-center text-md text-end bg-white w-full p-1 rounded-sm">
+                <a href="/login" onClick={logout} className="flex flex-row justify-center items-center text-md bg-white w-full p-1 rounded-sm">
                     <span>Logout</span>
                 </a>
             </div>

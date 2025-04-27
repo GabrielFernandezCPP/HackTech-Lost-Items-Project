@@ -7,6 +7,7 @@ import NotFound from './components/NotFound';
 import Register from './components/Register';
 import { useAuth } from './components/AuthProvider';
 import LostItemPage from './components/LostItemPage';
+import ViewItem from './components/ViewItem';
 
 function App() {
     const APP_TITLE = "Title";
@@ -24,6 +25,7 @@ function App() {
                     <Route path="/register" element={<Register />} />
                     <Route path="*" element={<NotFound />} />
                     <Route path="/lost/:uuid" element={<LostItemPage />} />
+                    <Route path="/item/:uuid" element={<ViewItem />} />
                 </Routes>
             </BrowserRouter>
         </div>
