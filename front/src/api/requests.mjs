@@ -49,9 +49,18 @@ export const register_user = async (email, password) => {
 
 export const check_auth = async () => {
     try {
-        console.log(API_URL);
         const res = await axios.get(`${API_URL}/auth/check`);
         return res.data.email;
+    } catch (error) {
+        console.error(error.message);
+        return null;
+    }
+}
+
+export const get_items = async () => {
+    try {
+        const res = await axios.post(`${API_URL}/items/get`);
+        return res.data.items;
     } catch (error) {
         console.error(error.message);
         return null;

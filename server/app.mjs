@@ -113,7 +113,7 @@ app.post('/auth/register', async (req, res) => {
 
     console.log(`Added row: ${added_row}`);
     
-    if (added_row) {
+    if (added_row != null) {
         let email = added_row[0].email;
         req.session.user = { email };
         res.json({ email: email });
@@ -122,8 +122,7 @@ app.post('/auth/register', async (req, res) => {
     else res.sendStatus(500);
 
     return added_row;
-}
-);
+});
 
 app.post('/items/new', async (req, res) => {
     // Validate item name through database
@@ -136,6 +135,18 @@ app.post('/items/new', async (req, res) => {
 
     // Add item to database
 
+    // Respond
+}
+);
+
+app.post('/items/get', async (req, res) => {
+    // Validate item name through database
+    const email = req.session.user;
+    const items = await head.db_GetItemsFromUser(email);
+
+    console.log(items)
+
+    res.status(200).json({ items: items });
     // Respond
 }
 );

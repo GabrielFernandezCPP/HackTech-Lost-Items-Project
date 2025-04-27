@@ -21,11 +21,13 @@ const AuthProvider = ({ children }) =>
     const login = async (email, password) => {
         const response_email = await get_login(email, password);
         setUser(response_email);
+        return response_email;
     }
 
     const register = async (email, password) => {
         const response_email = await register_user(email, password);
         setUser(response_email);
+        return response_email;
     }
 
     const logout = async () => {

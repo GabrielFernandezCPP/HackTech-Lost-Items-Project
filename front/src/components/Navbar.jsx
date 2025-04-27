@@ -7,7 +7,7 @@ function Navbar(props) {
 
     return (
     <>
-        <div className={`flex flex-col sticky justify-between w-40 text-xl h-full bg-healthygreen p-3`}>
+        <div className={`flex flex-col sticky justify-between sm:w-40 text-xl h-full bg-healthygreen p-3`}>
             <a href="/" className="flex flex-row justify-between items-center text-md text-end bg-white w-full p-1 rounded-sm">
                 <img className="h-6" src={'#'}></img>
                 <span>Home</span>
