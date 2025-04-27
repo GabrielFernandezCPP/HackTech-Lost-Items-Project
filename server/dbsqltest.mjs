@@ -6,6 +6,8 @@ import {v4 as uuidv4} from 'uuid'
 
 configDotenv();
 
+const MAX_ITEMS = 10;
+
 const db_url = "https://gxrljirppmwkbkfgoosk.supabase.co";
 const db_key = process.env.DB_ANON_KEY;
 
@@ -105,6 +107,20 @@ export async function db_GetItemsFromUser(email) {
                     .single();
 
                 retArr.push(loop.data);
+            }
+
+            //Add the default item to the list of items ONLY if there are less than maxitems
+
+            if (arr.length() < MAX_ITEMS)
+            {
+                retArr.push({
+                    id: -1,
+                    uuid: 0,
+                    owner_email: email,
+                    item_name: "Add Item",
+                    item_description: "Add a new item to find.",
+                    status : -1,
+                });
             }
 
             return retArr;
